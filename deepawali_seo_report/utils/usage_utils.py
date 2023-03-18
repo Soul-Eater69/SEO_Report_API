@@ -24,11 +24,11 @@ class UsabilityUtil:
         self.mobile_data = soup_obj["mobile_data"]
         self.desktop_data = soup_obj["desktop_data"]
 
-        options = Options()
+        '''options = Options()
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')
 
-        self.driver = webdriver.Chrome(options=options)
+        self.driver = webdriver.Chrome(options=options)'''
         
 
 
@@ -125,7 +125,7 @@ class UsabilityUtil:
             return True
         return False
 
-    def get_fonts(self):
+    '''def get_fonts(self):
         elements = self.driver.find_elements(By.XPATH, "//*[not(self::iframe) and not(self::frame) and not(self::frameset)]")
         for element in elements:
             font_size_str = element.value_of_css_property("font-size")
@@ -134,4 +134,4 @@ class UsabilityUtil:
                 if font_size < 11:
                     self.driver.quit()
                     return True
-        return False
+        return False'''
