@@ -43,35 +43,38 @@ class PerformanceUtil:
 
         # Loop through resources and add up sizes for each type
         for resource in resources:
-            content_type = resource["mimeType"]
-            size = resource["resourceSize"]/ 1_000_000
-            compressed_size = resource["transferSize"]/ 1_000_000
-            obj_counts["total_objects"] += 1
+            try:
+                content_type = resource["mimeType"]
+                size = resource["resourceSize"]/ 1_000_000
+                compressed_size = resource["transferSize"]/ 1_000_000
+                obj_counts["total_objects"] += 1
 
-            if "text/html" in content_type:
-                resource_sizes["html"]["original"] += size
-                resource_sizes["html"]["compressed"] += compressed_size
-                obj_counts["html_obj"] += 1
+                if "text/html" in content_type:
+                    resource_sizes["html"]["original"] += size
+                    resource_sizes["html"]["compressed"] += compressed_size
+                    obj_counts["html_obj"] += 1
 
-            elif "text/css" in content_type:
-                resource_sizes["css"]["original"] += size
-                resource_sizes["css"]["compressed"] += compressed_size
-                obj_counts["css_obj"] += 1
+                elif "text/css" in content_type:
+                    resource_sizes["css"]["original"] += size
+                    resource_sizes["css"]["compressed"] += compressed_size
+                    obj_counts["css_obj"] += 1
 
-            elif "javascript" in content_type:
-                resource_sizes["javascript"]["original"] += size
-                resource_sizes["javascript"]["compressed"] += compressed_size
-                obj_counts["javascript_obj"] += 1
+                elif "javascript" in content_type:
+                    resource_sizes["javascript"]["original"] += size
+                    resource_sizes["javascript"]["compressed"] += compressed_size
+                    obj_counts["javascript_obj"] += 1
 
-            elif "image/" in content_type:
-                resource_sizes["image"]["original"] += size
-                resource_sizes["image"]["compressed"] += compressed_size
-                obj_counts["image_obj"] += 1
+                elif "image/" in content_type:
+                    resource_sizes["image"]["original"] += size
+                    resource_sizes["image"]["compressed"] += compressed_size
+                    obj_counts["image_obj"] += 1
 
-            else:
-                resource_sizes["other"]["original"] += size
-                resource_sizes["other"]["compressed"] += compressed_size
-                obj_counts["other_obj"] += 1
+                else:
+                    resource_sizes["other"]["original"] += size
+                    resource_sizes["other"]["compressed"] += compressed_size
+                    obj_counts["other_obj"] += 1
+            except:
+                continue
 
         for resource_type, sizes in resource_sizes.items():
             if isinstance(sizes, dict):
