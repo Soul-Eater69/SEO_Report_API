@@ -102,7 +102,7 @@ def usabilityOrganizer(seo_obj):
         "expand_data": "Email addresses shown in clear text on your website can be easily scraped by bots, leading to inclusion in spam mailing lists.\nWe recommend removing any plain text email addresses and replacing them with contact forms, images, or less obvious text like 'email at website'."
     }
 
-    fonts_data = seo_obj.get_fonts()
+    '''fonts_data = seo_obj.get_fonts()
     seo_data["fonts_data"] = {
         "pass": 1 if not fonts_data else 0,
         "required": 1,
@@ -110,7 +110,7 @@ def usabilityOrganizer(seo_obj):
         "description": "",
         "text": "No email addresses have been found in plain text on your page." if not email_data else "Email addresses have been found in plain text on your page.",
         "expand_data": "Email addresses shown in clear text on your website can be easily scraped by bots, leading to inclusion in spam mailing lists.\nWe recommend removing any plain text email addresses and replacing them with contact forms, images, or less obvious text like 'email at website'."
-    }
+    }'''
 
 
     return seo_data
