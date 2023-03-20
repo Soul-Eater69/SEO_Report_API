@@ -20,7 +20,7 @@ class Setup(Resource):
     def post(self):
         url = request.get_json()["url"]
         cached_url = cache.get('url')
-        print("CACHED--->",cache.get('url'),"Actual---->"url)
+        print("CACHED--->",cache.get('url'),"Actual---->",url)
         if cached_url is None or cache.get('url') != url:
             print("Not cached")
             data_setter = DataSetter(url)
