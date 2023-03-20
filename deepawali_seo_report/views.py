@@ -1,5 +1,6 @@
 from . import app
 import json
+from urllib.parse import urlparse
 from flask import request, jsonify
 from flask_restful import Resource
 from .utils.dataSetter import DataSetter
@@ -18,9 +19,9 @@ cache.init_app(app)
 
 class Setup(Resource):
     def post(self):
-        url = request.get_json()["url"]
+        """ url = request.get_json()["url"]
         cached_url = cache.get('url')
-        print("CACHED--->",cache.get('url'),"Actual---->",url)
+        print(cache.get('url'),url)
         if cached_url is None or cache.get('url') != url:
             print("Not cached")
             data_setter = DataSetter(url)
@@ -28,7 +29,17 @@ class Setup(Resource):
 
             cache.set('soup_obj', soup_obj)
             cache.set('url', url)
-        return jsonify({"status": 'URL set'})
+        return jsonify({"status": 'URL set'}) """
+
+        domain = request.get_json()["domainName"]
+        print(domain)
+        cached_domain = cache.get('domain')
+        if cached_domain is None or cached_domain != domain:
+            data_setter = DataSetter(domain)
+            soup_obj, url = data_setter.get_data_obj()
+            cache.set('soup_obj', soup_obj)
+            cache.set('domain', domain)
+        return jsonify({"status": 'URL set', "url":url})
 
 
 class OnPageSEO(Resource):
@@ -39,7 +50,6 @@ class OnPageSEO(Resource):
             return jsonify({"status": 'URL not set'})
 
         soup_obj = json.loads(cache.get('soup_obj'))
-        print("SOUPED-->",soup_obj["url"])
         on_page_seo_obj = OnPageSEOUtil(soup_obj)
         organized_data = seoOrganizer(on_page_seo_obj)
 
