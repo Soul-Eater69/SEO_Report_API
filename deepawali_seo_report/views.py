@@ -20,7 +20,7 @@ class Setup(Resource):
     def post(self):
         url = request.get_json()["url"]
         cached_url = cache.get('url')
-        print(cache.get('url'),url)
+        print("CACHED--->",cache.get('url'),"Actual---->"url)
         if cached_url is None or cache.get('url') != url:
             print("Not cached")
             data_setter = DataSetter(url)
@@ -39,6 +39,7 @@ class OnPageSEO(Resource):
             return jsonify({"status": 'URL not set'})
 
         soup_obj = json.loads(cache.get('soup_obj'))
+        print("SOUPED-->",soup_obj["url"])
         on_page_seo_obj = OnPageSEOUtil(soup_obj)
         organized_data = seoOrganizer(on_page_seo_obj)
 
