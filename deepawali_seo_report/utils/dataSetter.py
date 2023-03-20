@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import concurrent.futures
 import json
+from urllib.parse import urlparse
 
 
 
@@ -12,10 +13,9 @@ class DataSetter:
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self, url):
-        try:
-            self.response = requests.get(url)
-            self.url = url
+    def __init__(self, domain_name):
+        try:     
+            self.url, self.response = self.get_url_content(domain_name)
             self.soup = BeautifulSoup(self.response.text, 'html.parser')
 
             pattern = re.compile(r"(https?)://([A-Za-z0-9\-\.]+).*")
@@ -54,8 +54,27 @@ class DataSetter:
                 print("lighthous", e)
 
         except Exception as e:
+            print("Exception\n\n")
             print(e)
             return e
+    
+    
+    def get_url_content(self,domain):
+        print("value",domain)
+        urls_to_try = [
+            f"https://www.{domain}",
+            f"https://{domain}",
+            f"http://www.{domain}",
+            f"http://{domain}",
+            f"{domain}"
+        ]        
+        for url_to_try in urls_to_try:
+            try:
+                response = requests.get(url_to_try)
+                return url_to_try, response
+            except requests.exceptions.RequestException:
+                pass
+        raise ValueError("Invalid URL")
 
     def get_data_obj(self):
         data_dict = {
@@ -68,4 +87,4 @@ class DataSetter:
             "mobile_data": self.mobile_data,
             "desktop_data": self.desktop_data,
         }
-        return json.dumps(data_dict)
+        return json.dumps(data_dict), str(self.url)
