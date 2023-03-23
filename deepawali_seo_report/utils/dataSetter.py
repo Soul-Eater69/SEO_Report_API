@@ -23,7 +23,6 @@ class DataSetter:
 
             if match:
                 protocol = match.group(1)
-                domain_name = match.group(2)
             else:
                 raise Exception("Not a valid url")
 
