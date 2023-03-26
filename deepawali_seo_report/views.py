@@ -39,7 +39,8 @@ class Setup(Resource):
             soup_obj, url = data_setter.get_data_obj()
             cache.set('soup_obj', soup_obj)
             cache.set('domain', domain)
-        return jsonify({"status": 'URL set', "url":url})
+            cache.set("url",url)
+        return jsonify({"status": 'URL set', "url":cache.get("url")})
 
 
 class OnPageSEO(Resource):
