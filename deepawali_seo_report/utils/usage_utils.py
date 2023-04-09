@@ -3,12 +3,6 @@ from PIL import Image
 import re
 from bs4 import BeautifulSoup
 import io
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-
-
-
 
 
 class UsabilityUtil:
@@ -20,19 +14,12 @@ class UsabilityUtil:
     def __init__(self, soup_obj):
         self.url = soup_obj["url"]
         self.response = soup_obj["response"]
-        self.soup = BeautifulSoup(self.response["text"],"html.parser")
+        self.soup = BeautifulSoup(self.response["text"], "html.parser")
         self.mobile_data = soup_obj["mobile_data"]
         self.desktop_data = soup_obj["desktop_data"]
 
-        '''options = Options()
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
-
-        self.driver = webdriver.Chrome(options=options)'''
-        
-
-
     # mode represents mobile(0) or desktop(1).
+
     def get_opportunities(self, mode):
         data = self.mobile_data if mode == 0 else self.desktop_data
 
@@ -64,20 +51,30 @@ class UsabilityUtil:
         # into seconds (/1000)
         fcp = data["loadingExperience"]["metrics"]["FIRST_CONTENTFUL_PAINT_MS"]["percentile"]/1000
         speed_index = data["lighthouseResult"]["audits"]["speed-index"]["displayValue"].replace(
-            '\xa0', ' ').replace("s","")
+            '\xa0', ' ').replace("s", "")
         lcp = data["lighthouseResult"]["audits"]["largest-contentful-paint"]["displayValue"].replace(
-            '\xa0', ' ').replace("s","")
+            '\xa0', ' ').replace("s", "")
         time_interactive = data["lighthouseResult"]["audits"]["interactive"]["displayValue"].replace(
-            '\xa0', ' ').replace("s","")
+            '\xa0', ' ').replace("s", "")
         blocking_time = int(data["lighthouseResult"]["audits"]["total-blocking-time"]["displayValue"].replace(
-            '\xa0', ' ').replace("ms","").replace(",",""))/1000
+            '\xa0', ' ').replace("ms", "").replace(",", ""))/1000
         cls_ = data["lighthouseResult"]["audits"]["cumulative-layout-shift"]["displayValue"].replace(
             '\xa0', ' ')
 
-        return [fcp, speed_index, lcp, time_interactive, blocking_time, cls_]
+        good_seo_time = True
+
+        try:
+            if float(fcp) > 2.0 or float(speed_index.strip()) > 3.0 or float(lcp.strip()) > 2.5 or float(time_interactive.strip()) > 5.0 or float(blocking_time) > 0.3 or float(cls_.strip()) > 0.1:
+                good_seo_time = False
+        except Exception as e:
+            print(e)
+            good_seo_time = True
+
+        return [fcp, speed_index, lcp, time_interactive, blocking_time, cls_], good_seo_time
 
     def get_screenshot(self, mode):
-        data = self.mobile_data if mode == 0 else self.desktop_data if mode==1 else self.tablet_data
+
+        data = self.mobile_data if mode == 0 else self.desktop_data if mode == 1 else self.tablet_data
 
         # Assuming that the Lighthouse JSON response is stored in a variable called "data"
         screenshot_data = data["lighthouseResult"]["audits"]["final-screenshot"]["details"]["data"]
@@ -89,19 +86,18 @@ class UsabilityUtil:
         # Compress the image by reducing its quality
         image_buffer = io.BytesIO()
         screenshot_image.save(image_buffer, format='JPEG', quality=110)
-        
+
         # Convert the compressed image to base64-encoded string
         image_bytes = image_buffer.getvalue()
         base64_image = base64.b64encode(image_bytes).decode('utf-8')
 
         # Return the base64-encoded image string as part of the API response
         return {"screenshot_image": base64_image}
-    
+
     def get_mobile_viewport(self):
         viewport_tag = self.soup.find('meta', attrs={'name': 'viewport'})
 
         return True if viewport_tag else False
-            
 
     def flash_used(self):
         flash_embeds = self.soup.find_all(
@@ -119,19 +115,9 @@ class UsabilityUtil:
 
     def get_emails(self):
         text = self.response["text"]
-        email_regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b' # regular expression to match email addresses
+        # regular expression to match email addresses
+        email_regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 
         if re.search(email_regex, text):
             return True
         return False
-
-    '''def get_fonts(self):
-        elements = self.driver.find_elements(By.XPATH, "//*[not(self::iframe) and not(self::frame) and not(self::frameset)]")
-        for element in elements:
-            font_size_str = element.value_of_css_property("font-size")
-            if "px" in font_size_str:
-                font_size = float(font_size_str.replace("px", ""))
-                if font_size < 11:
-                    self.driver.quit()
-                    return True
-        return False'''

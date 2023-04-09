@@ -173,7 +173,27 @@ class PerformanceUtil:
 
         return amp_data
 
-    
+    def get_js_errors(self):
+        # Create a new Chrome browser instance
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+        driver = webdriver.Chrome(
+            executable_path="D:\\driver\\chromedriver.exe", options=options)
+
+        # Navigate to the website
+        driver.get(self.url)
+
+        error_strings = ["SyntaxError", "EvalError",
+                         "ReferenceError", "RangeError", "TypeError", "URIError"]
+        js_errors = driver.get_log("browser")
+        js_errors = [error for error in js_errors if any(
+            error_string in error["message"] for error_string in error_strings)]
+
+        driver.quit()
+        if js_errors:
+            return True
+
+        return False
 
     def check_http2(self):
         try:

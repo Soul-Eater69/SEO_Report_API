@@ -35,6 +35,8 @@ class DataSetter:
                 """ lighthouse_tablet_url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url="++ \
                     protocol + "://" + domain_name +"&emulatedFormFactor=tablet&screenEmulation.disabled=true&deviceScreenSize=768x1024&key=AIzaSyCGK9KUGoc66FjkFCiXlVY8ZTFwOJK3Fbg" """
                 import json
+
+                print(lighthouse_desktop_url)
                 with concurrent.futures.ThreadPoolExecutor() as executor:
                     futures = [executor.submit(requests.get, url) for url in [
                         lighthouse_mobile_url, lighthouse_desktop_url]]
@@ -46,7 +48,6 @@ class DataSetter:
                         elif response.url == lighthouse_desktop_url:
                             self.desktop_data = response.json()
 
-                
                 """ self.mobile_data = ""
                 self.desktop_data = "" """
             except Exception as e:
