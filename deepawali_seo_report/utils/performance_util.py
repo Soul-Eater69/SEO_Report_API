@@ -1,4 +1,4 @@
-from selenium import webdriver
+
 from urllib.parse import urlparse
 import socket
 import ssl
