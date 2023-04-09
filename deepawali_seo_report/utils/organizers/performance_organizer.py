@@ -1,4 +1,4 @@
-from deepawali_seo_report.utils.lib import gradeCalculator
+from .utils.lib import gradeCalculator
 
 
 def performanceOrganizer(seo_obj):
