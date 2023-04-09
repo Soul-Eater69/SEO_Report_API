@@ -1,4 +1,4 @@
-from .utils.lib import gradeCalculator
+
 
 
 def seoOrganizer(seo_obj):
@@ -220,11 +220,6 @@ def seoOrganizer(seo_obj):
     for i in seo_data:
         seo_data[i]["category"] = "On-Page SEO"
 
-    grade, percentage, grade_title, grade_text = gradeCalculator(
-        seo_data, "On-Page SEO")
-    seo_data["percentage"] = percentage
-    seo_data["grade"] = grade
-    seo_data["grade_title"] = grade_title
-    seo_data["grade_text"] = grade_text
+  
 
     return seo_data
