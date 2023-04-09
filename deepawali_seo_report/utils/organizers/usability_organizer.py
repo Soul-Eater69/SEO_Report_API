@@ -1,4 +1,4 @@
-from .utils.lib import gradeCalculator
+
 
 
 def usabilityOrganizer(seo_obj):
@@ -124,11 +124,5 @@ def usabilityOrganizer(seo_obj):
     for i in seo_data:
         seo_data[i]["category"] = "Usability"
 
-    grade, percentage, grade_title, grade_text = gradeCalculator(
-        seo_data, "Usability")
-    seo_data["percentage"] = percentage
-    seo_data["grade"] = grade
-    seo_data["grade_title"] = grade_title
-    seo_data["grade_text"] = grade_text
 
     return seo_data
