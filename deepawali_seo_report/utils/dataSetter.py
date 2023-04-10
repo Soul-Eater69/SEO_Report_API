@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import concurrent.futures
 import json
 from urllib.parse import urlparse
-
+from urllib.parse import quote
 
 
 class DataSetter:
@@ -14,7 +14,7 @@ class DataSetter:
         return cls._instance
 
     def __init__(self, domain_name):
-        try:     
+        try:
             self.url, self.response = self.get_url_content(domain_name)
             self.soup = BeautifulSoup(self.response.text, 'html.parser')
 
@@ -24,50 +24,55 @@ class DataSetter:
             if match:
                 protocol = match.group(1)
             else:
+
                 raise Exception("Not a valid url")
 
             try:
                 lighthouse_mobile_url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=" + \
-                    protocol + "://" + domain_name + "/&strategy=mobile&locale=en&key=AIzaSyCGK9KUGoc66FjkFCiXlVY8ZTFwOJK3Fbg"
+                    protocol + "://" + domain_name + \
+                    "/&strategy=mobile&locale=en&key=AIzaSyCGK9KUGoc66FjkFCiXlVY8ZTFwOJK3Fbg"
                 lighthouse_desktop_url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=" + \
-                    protocol + "://" + domain_name + "/&strategy=desktop&locale=en&key=AIzaSyCGK9KUGoc66FjkFCiXlVY8ZTFwOJK3Fbg"
-                
+                    protocol + "://" + domain_name + \
+                    "/&strategy=desktop&locale=en&key=AIzaSyCGK9KUGoc66FjkFCiXlVY8ZTFwOJK3Fbg"
+
                 """ lighthouse_tablet_url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url="++ \
                     protocol + "://" + domain_name +"&emulatedFormFactor=tablet&screenEmulation.disabled=true&deviceScreenSize=768x1024&key=AIzaSyCGK9KUGoc66FjkFCiXlVY8ZTFwOJK3Fbg" """
                 import json
 
                 print(lighthouse_desktop_url)
+
                 with concurrent.futures.ThreadPoolExecutor() as executor:
                     futures = [executor.submit(requests.get, url) for url in [
                         lighthouse_mobile_url, lighthouse_desktop_url]]
 
                     for future in concurrent.futures.as_completed(futures):
                         response = future.result()
-                        if response.url == lighthouse_mobile_url:
+
+                        if "mobile" in response.url:
                             self.mobile_data = response.json()
-                        elif response.url == lighthouse_desktop_url:
+                        elif "desktop" in response.url:
                             self.desktop_data = response.json()
 
                 """ self.mobile_data = ""
                 self.desktop_data = "" """
             except Exception as e:
+
                 print("lighthous", e)
 
         except Exception as e:
             print("Exception\n\n")
             print(e)
             return e
-    
-    
-    def get_url_content(self,domain):
-        print("value",domain)
+
+    def get_url_content(self, domain):
+        print("value", domain)
         urls_to_try = [
             f"https://www.{domain}",
             f"https://{domain}",
             f"http://www.{domain}",
             f"http://{domain}",
             f"{domain}"
-        ]        
+        ]
         for url_to_try in urls_to_try:
             try:
                 response = requests.get(url_to_try)
