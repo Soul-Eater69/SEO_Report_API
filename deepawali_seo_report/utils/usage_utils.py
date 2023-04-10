@@ -37,7 +37,7 @@ class UsabilityUtil:
 
     def get_vitals(self, mode):  # mode represents mobile(0) or desktop(1).
         data = self.mobile_data if mode == 0 else self.desktop_data
-
+        print("\n\n\n\n\n",data["loadingExperience"]["metrics"],"\n\n\n")
         # into seconds (/1000)
         fid = data["loadingExperience"]["metrics"]["FIRST_INPUT_DELAY_MS"]["percentile"]
         lcp = data["loadingExperience"]["metrics"]["LARGEST_CONTENTFUL_PAINT_MS"]["percentile"]/1000
