@@ -1,10 +1,13 @@
 from deepawali_seo_report import app
 from deepawali_seo_report.views import *
 from flask_restful import Api
+from deepawali_seo_report.database.models import User
+from dotenv import load_dotenv
 
-
+load_dotenv()
 
 api = Api(app)
+
 
 api.add_resource(OnPageSEO, "/getOnPageSEOReport")
 api.add_resource(Usability, "/getUsabilityReport")
