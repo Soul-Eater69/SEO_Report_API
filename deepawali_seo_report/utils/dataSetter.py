@@ -3,8 +3,8 @@ import requests
 from bs4 import BeautifulSoup
 import concurrent.futures
 import json
-from urllib.parse import urlparse
-from urllib.parse import quote
+import os
+from deepawali_seo_report import app
 
 
 class DataSetter:
@@ -30,10 +30,12 @@ class DataSetter:
             try:
                 lighthouse_mobile_url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=" + \
                     protocol + "://" + domain_name + \
-                    "/&strategy=mobile&locale=en&key=AIzaSyCGK9KUGoc66FjkFCiXlVY8ZTFwOJK3Fbg"
+                    "/&strategy=mobile&locale=en&key=" + \
+                    app.config['LIGHTHOUSE_API_KEY']
                 lighthouse_desktop_url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=" + \
                     protocol + "://" + domain_name + \
-                    "/&strategy=desktop&locale=en&key=AIzaSyCGK9KUGoc66FjkFCiXlVY8ZTFwOJK3Fbg"
+                    "/&strategy=desktop&locale=en&key=" + \
+                    app.config['LIGHTHOUSE_API_KEY']
 
                 """ lighthouse_tablet_url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url="++ \
                     protocol + "://" + domain_name +"&emulatedFormFactor=tablet&screenEmulation.disabled=true&deviceScreenSize=768x1024&key=AIzaSyCGK9KUGoc66FjkFCiXlVY8ZTFwOJK3Fbg" """
