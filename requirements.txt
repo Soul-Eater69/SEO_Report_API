@@ -1,7 +1,7 @@
 aniso8601==9.0.1
 async-generator==1.10
 gunicorn
-dotenv
+python-dotenv
 attrs==22.2.0
 autopep8==2.0.2
 beautifulsoup4==4.11.2
