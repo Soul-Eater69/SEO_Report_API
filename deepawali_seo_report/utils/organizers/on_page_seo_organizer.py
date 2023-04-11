@@ -9,7 +9,7 @@ def seoOrganizer(seo_obj):
         "pass": 1 if title_data["title_length"] in range(10, 70) else 0,
         "required": 1,
         "display_title": "Title Tag",
-        "priority": 1,
+        "priority": 0,
         "recommendation": "Include a title of length in the range of 10 - 70 characters.",
         "description": "You have a title tag of optimal length (between 10 and 70 characters)." if title_data["title_length"] in range(10, 70) else f"Your title length is {title_data['title_length']}, the optimal range is 10 and 70",
         "text": title_data["title_text"] if title_data["title_text"] else "Your page appears to be missing a title tag.",
@@ -65,7 +65,7 @@ def seoOrganizer(seo_obj):
     seo_data["h1_data"] = {
         "pass": 1 if h1_data else 0,
         "required": 1,
-        "priority": 2,
+        "priority": 0,
         "recommendation": "Its better to add H1 tags to highlight your headings.",
         "display_title": "H1 Header Tag Usage",
         "text": h1_data if h1_data else [],
@@ -79,7 +79,7 @@ def seoOrganizer(seo_obj):
         "required": 1,
         "total_h_tags": headers_data["total_h_tags"],
         "display_title": "H2-H6 Header Tag Usage",
-        "priority": 2,
+        "priority": 1,
         "recommendation": "Use Header tags to represent the headings.",
         "tags": headers_data["tags"],
         "text": headers_data["headings_data"] if headers_data["total_h_tags"] > 0 else [],
@@ -93,6 +93,8 @@ def seoOrganizer(seo_obj):
         "required": 1,
         "display_title": "Amount of Content",
         "text": content_data if content_data > 0 else 0,
+        "priority": 1,
+        "recommendation": "Please use good level of textual content.",
         "description": "Your page has a good level of textual content, which will assist in it's ranking potential." if content_data > 250 else "Your page does not have a good level of textual content, which will affect it's ranking potential.",
         "expand_data": "Numerous studies have shown that there is a relationship between the amount of content on a page (typically measured in word count) and it's ranking potential - generally longer content will rank higher. Obviously content also needs to be topically relevant, keyword rich and highly readable for the visitor. Note, in our assessment, we look at all selectable text on the page at load time, not hidden content.\nAs a general guideline, it is recommended to have atleast 500 words of content on a page to give it some ranking potential. However this should be considered on a case by case basis. It may not be relevant for particular pages like 'contact us' pages for example."
     }
@@ -103,7 +105,7 @@ def seoOrganizer(seo_obj):
         "required": 1,
         "display_title": "Image Alt Attributes",
         "total_imgs": images_data["total_imgs"],
-        "priority": 2,
+        "priority": 0,
         "recommendation": "Add Alt attributes to all images.",
         "missing_attrs": images_data["tags_without_alt_len"],
         "text": images_data["total_imgs"] if images_data["total_imgs"] > 0 else [],
@@ -130,7 +132,7 @@ def seoOrganizer(seo_obj):
         "pass": 1 if not no_index_tag_data["noindex_tag"] else 0,
         "required": 1,
         "display_title": "Noindex Tag Test",
-        "priority": 2,
+        "priority": 1,
         "recommendation": "Check for any noindex tags on the page.",
         "text": "",
         "description": "Your page is not using the Noindex Tag which prevents indexing." if not no_index_tag_data["noindex_tag"] else "Your page is using the Noindex Tag which prevents indexing.",
@@ -142,7 +144,7 @@ def seoOrganizer(seo_obj):
         "required": 1,
         "display_title": "Noindex Header Test",
         "text": "",
-        "priority": 2,
+        "priority": 1,
         "recommendation": "Remove any noindex headers from your website.",
         "description": "Your page is not using the Noindex Header Tag which prevents indexing." if not no_index_tag_data["noindex_header"] else "Your page is using the Noindex Header Tag which prevents indexing.",
         "expand_data": "A critical part of a page's ranking potential is ensuring that it can actually be accessed by Search Engines. The Noindex Header is another Noindexing method that tells Search Engines to ignore a page, and can destroy out it's ranking ability. Sometimes these tags are added intentionally for low value pages, but sometimes they are left over unintentionally from a theme or template that has been used on the site, or forgotten to be removed by a developer when a website moves from design and testing to live usage.\nIf you want the page to rank and it's using a Noindex Header, you will need to remove the Noindex Header from your page. This may require access to the backend code, and may need to be done by a developer. If you are using a CMS, you may have an option enabled to prevent indexing of the page, which should be turned off."
@@ -166,7 +168,7 @@ def seoOrganizer(seo_obj):
         "required": 1,
         "display_title": "Robots.txt",
         "text": "",
-        "priority": 2,
+        "priority": 1,
         "recommendation": "Create a robots.txt file.",
         "description": "Your website appears to have a robots.txt file." if robots_data["robots"] else "Your website appears not to have a robots.txt file.",
         "expand_data": "Robots.txt is a text file that provides instructions to Search Engine crawlers on how to crawl your site, including types of pages to access or not access. It is often the gatekeeper of your site, and normally the first thing a Search Engine bot will access.We recommend always having a robots file in place for your site. These can be automatically created using a free online utility, Wordpress plugin, or your CMS's robots.txt creation process."
@@ -187,7 +189,7 @@ def seoOrganizer(seo_obj):
         "required": 1,
         "display_title": "Blocked by Robots.txt",
         "text": "",
-        "priority": 2,
+        "priority": 1,
         "recommendation": "Review your robots.txt file to ensure its is not blocking any important pages.",
         "description": description,
         "expand_data": "The robots.txt file includes important instructions to Search Engines on how to crawl a site, including instructions to ignore particular pages (effectively 'blocking' them). Sometimes these instructions are added intentionally for low value pages, but sometimes they are left over by mistake when a website goes live, or can be written incorrectly excluding more pages than desired.\nIf you want the page to rank and it's blocked by a rule in robots.txt, you may need to review your robots rules to understand why it's being blocked, and remove the rule. Because robots.txt instructions are a type of code, this may require the help of a developer to correct."
@@ -197,7 +199,7 @@ def seoOrganizer(seo_obj):
     seo_data["xml_data"] = {
         "pass": 1 if xml_data else 0,
         "required": 1,
-        "priority": 2,
+        "priority": 0,
         "recommendation": "Create a sitemap for your website.",
         "display_title": "XML Sitemaps",
         "text": "",
@@ -209,7 +211,7 @@ def seoOrganizer(seo_obj):
     seo_data["structured_data"] = {
         "pass": 1 if structured_data["schema_type"] else 0,
         "required": 1,
-        "priority": 2,
+        "priority": 0,
         "recommendation": "Use Schema.org markup.",
         "display_title": "Schema.org Structured Data",
         "text": "",
