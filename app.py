@@ -19,4 +19,5 @@ api.add_resource(Users, "/user")
 
 
 if __name__ == "__main__":
+    print("started")
     app.run(debug=True)
