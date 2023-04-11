@@ -3,6 +3,8 @@ import requests
 from bs4 import BeautifulSoup
 from googleapiclient.discovery import build
 import re
+import os
+from deepawali_seo_report import app
 
 
 class SocialUtil:
@@ -136,7 +138,7 @@ class SocialUtil:
             # check if a YouTube link was found
             if youtube_link:
 
-                api_key = 'AIzaSyCGK9KUGoc66FjkFCiXlVY8ZTFwOJK3Fbg'
+                api_key = app.config["YOUTUBE_API_KEY"]
 
                 # authenticate with the YouTube Data API using the API key above
                 youtube = build('youtube', 'v3', developerKey=api_key)
